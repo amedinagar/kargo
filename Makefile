@@ -95,6 +95,7 @@ test-unit:
 build-cli:
 	CGO_ENABLED=0 go build \
 		-ldflags "-w -X $(VERSION_PACKAGE).version=$(VERSION) -X $(VERSION_PACKAGE).buildDate=$$(date -u +'%Y-%m-%dT%H:%M:%SZ') -X $(VERSION_PACKAGE).gitCommit=$(GIT_COMMIT) -X $(VERSION_PACKAGE).gitTreeState=$(GIT_TREE_STATE)" \
+		-buildvcs=false \
 		-o bin/kargo-$(GOOS)-$(GOARCH)$(shell [ ${GOOS} = windows ] && echo .exe) \
 		./cmd/cli
 
@@ -204,7 +205,7 @@ hack-build:
 .PHONY: hack-build-cli
 hack-build-cli: hack-build-dev-tools
 	@# Local values of GOOS and GOARCH get passed into the container.
-	$(DOCKER_CMD) sh -c 'GOOS=$(GOOS) GOARCH=$(GOARCH) make build-cli'
+	$(DOCKER_CMD) sh -c 'GOOS=$(GOOS)  make build-cli'
 
 .PHONY: hack-kind-up
 hack-kind-up:
